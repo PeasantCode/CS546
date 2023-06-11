@@ -9,7 +9,7 @@ export let palindromes = (string) => {
   for (let i = 0; i < string.length; i++) {
     const element = string[i].replace(/[\s]/g, "");
     if (typeof element !== "string")
-      throw "Array contains non_string elements!";
+      throw "Array contains non-string elements!";
 
     if (element.match(/[a-z0-9]/gi) === null)
       throw "Array contains only non-alphanumeric characters!";
@@ -23,10 +23,9 @@ export let palindromes = (string) => {
 
   const res = {};
   for (let i = 0; i < string.length; i++) {
-    let lowerStr = string[i].toLowerCase().replace(/[^a-z0-9]/g, "");
-    let reversedStr = lowerStr.split("").reverse().join("");
-    const isPalindromes = lowerStr === reversedStr;
-    res[lowerStr] = isPalindromes;
+    const lowerStr = string[i].toLowerCase().replace(/[^a-z0-9]/g, "");
+    const reversedStr = lowerStr.split("").reverse().join("");
+    res[lowerStr] = lowerStr === reversedStr;
   }
   return res;
 };
@@ -64,37 +63,47 @@ export let censorWords = (string, badWordsList) => {
 };
 
 export let distance = (string, word1, word2) => {
-  if (!string.trim() || !word1.trim() || !word2.trim())
-    throw "input should not be empty strings!";
   if (typeof string !== "string") throw "the type of string should be string!";
   if (typeof word1 !== "string") throw "the type of word1 should be string!";
   if (typeof word2 !== "string") throw "the type of word2 should be string!";
+  string = string.trim();
+  word1 = word1.trim();
+  word2 = word2.trim();
+  if (!string || !word1 || !word2) throw "input should not be empty strings!";
 
   if (
-    /^[\s\p{Punctuation}]+$/.test(string) ||
-    /^[\s\p{Punctuation}]+$/.test(word1) ||
-    /^[\s\p{Punctuation}]+$/.test(word2)
+    /[.,\/#!$%\^&\*;:{}=\-_`~()]/.test(string) ||
+    /[.,\/#!$%\^&\*;:{}=\-_`~()]/.test(word1) ||
+    /[.,\/#!$%\^&\*;:{}=\-_`~()]/.test(word2)
   )
-    throw new Error(
-      "Inputs can't be strings made of only punctuation symbols or spaces"
-    ); // chatgpt
+    throw "Inputs can't be strings made of only punctuation symbols or spaces";
 
   if (string.split(" ").length < 2)
     throw "the string is ar least two words long!";
   if (word1 === word2) throw "word1 and word2 cannot be same!";
 
-  let lower_word1 = word1.toLowerCase();
-  let lower_word2 = word2.toLowerCase();
-  let words = string.split(" ");
+  const lower_word1 = word1.toLowerCase();
+  const lower_word2 = word2.toLowerCase();
+  const words = string.split(" ");
 
-  let word1_index = words.indexOf(lower_word1);
-  if (word1_index === -1) throw "word1 must exist in the string!";
+  let w1 = word1.indexOf(lower_word1);
+  let w2 = word2.indexOf(lower_word2);
+  if (w1 === -1) throw "word1 must exist in the string!";
+  if (w2 === -1) throw "word1 must exist in the string!";
+  if (w1 > w2) throw "word1 must appear before word2!";
 
-  let word2_index = words.indexOf(lower_word2, word1_index + 1);
-  if (word2_index === -1) throw "word2 must exist in the string";
-
-  if (word1_index > word2_index)
-    throw "word1 must appear before word2 in the string!";
-
-  return word2_index - word1_index;
+  const arr = [];
+  for (let w1 = 0; w1 < words.length; w1++) {
+    if (words[w1] === lower_word1) {
+      for (let w2 = 1; w2 < words.length; w2++) {
+        if (words[w2] === lower_word2) {
+          arr.push(Math.abs(w2 - w1));
+          arr.sort((a, b) => {
+            return a - b;
+          });
+        }
+      }
+    }
+  }
+  return arr[0];
 };

@@ -2,13 +2,12 @@
       using the ES6 exports syntax. 
       DO NOT CHANGE THE FUNCTION NAMES
 */
-
+//只有类名全大写
 import {
   check_sortBy,
-  OnlyNumber,
-  MultiplyOrNot,
-  CheckMatrixValidity,
-  Multiply,
+  matrixMultiplyCompatible,
+  checkMatrixValidity,
+  multiply,
 } from "./helpers.js";
 
 export let sortAndFilter = (
@@ -41,20 +40,20 @@ export let sortAndFilter = (
   if (!array.every((obj) => Object.keys(obj).length > 0))
     throw "some objects in array parameter are empty!";
 
-  let keys1 = Object.keys(array[0]).sort();
-  for (let i = 0; i < array.length; i++) {
-    let keys2 = Object.keys(array[i]).sort();
-    for (let j = 0; j < keys1.length; j++) {
-      if (keys1.length !== keys2.length)
-        throw "Two objects in array parameter do not share two same keys!";
+  const keys1 = Object.keys(array[0]).sort();
+  for (let i = 1; i < array.length; i++) {
+    const keys2 = Object.keys(array[i]).sort();
+    if (keys1.length !== keys2.length)
+      throw "Two objects in array parameter do not share two the same keys!";
 
+    for (let j = 0; j < keys1.length; j++) {
       if (keys1[j] !== keys2[j])
-        throw "Two objects in array parameter do not share two same keys!";
+        throw `${keys1[j]} and ${keys2[j]} does not share two same keys!`;
     }
   }
 
   for (let i = 0; i < array.length; i++) {
-    for (let each_value of Object.values(array[i])) {
+    for (const each_value of Object.values(array[i])) {
       if (typeof each_value !== "string")
         throw "the value of objects in array parameter must be string!";
 
@@ -78,16 +77,22 @@ export let sortAndFilter = (
     throw "there is at least one object that has that value and is a string!";
 
   const resOfFilter = array.filter((array) => array[filterBy] === filterByTerm);
+
   const sortComparator = (a, b, prop, direction) => {
     const valueA = a[prop];
     const valueB = b[prop];
 
-    if (valueA > valueB) return direction === "asc" ? 1 : -1;
-    if (valueA < valueB) return direction === "asc" ? -1 : 1;
-    return 0;
+    // if (valueA > valueB) return direction === "asc" ? 1 : -1;
+    // if (valueA < valueB) return direction === "asc" ? -1 : 1;
+    // return 0;
+    return direction === "asc"
+      ? valueA.localeCompare(valueB)
+      : valueB.localeCompare(valueA);
   };
+
   const [sortByField1, order1] = sortBy1;
   const [sortByField2, order2] = sortBy2;
+  
   resOfFilter.sort(
     (a, b) =>
       sortComparator(a, b, sortByField1, order1) ||
@@ -97,8 +102,8 @@ export let sortAndFilter = (
   return resOfFilter;
 };
 
-export let merge = (...args) => {
-  if (args.length < 2) throw "at least one array is supplied as input!";
+  export let merge = (...args) => {
+  if (args.length < 1) throw "at least one array is supplied as input!";
   if (!args.every((item) => Array.isArray(item)))
     throw "every input should be an array!";
   if (args.some((each) => each.length === 0))
@@ -115,11 +120,12 @@ export let merge = (...args) => {
     if (typeof a === "number" && typeof b === "number") return a - b;
     if (typeof a === "number") return -1;
     if (typeof b === "number") return 1;
-    if (typeof a === "string" && typeof b === "string") {
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    }
+    // if (typeof a === "string" && typeof b === "string") {
+    //   if (a < b) return -1;
+    //   if (a > b) return 1;
+    //   return 0;
+    // }
+    return a.localeCompare(b);
   });
   return flattenArray;
 };
@@ -133,21 +139,17 @@ export let matrixMultiply = (...args) => {
   if (args.some((item) => item.length === 0))
     throw "every array should not be empty!";
 
-  for (let i = 0; i < args.length; i++) {
-    OnlyNumber(args[i]);
-  }
-
   for (let i = 0; i < args.length - 1; i++) {
-    MultiplyOrNot(args[i], args[i + 1]);
+    matrixMultiplyCompatible(args[i], args[i + 1]);
   }
 
   for (let i = 0; i < args.length; i++) {
-    CheckMatrixValidity(args[i]);
+    checkMatrixValidity(args[i]);
   }
 
   let result = args[0];
   for (let i = 1; i < args.length; i++) {
-    result = Multiply(result, args[i]);
+    result = multiply(result, args[i]);
   }
   return result;
 };

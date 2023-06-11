@@ -185,11 +185,10 @@ console.log(newStr);
 
 let res = {};
 
-let arg = { a: 3, b: 7, c: 5, d: 4, e: 9, a: 8, d: 2 };
-for (let i in arg) {
-  if (res[i] === undefined) {
-    res[i] = arg[i];
-  }
-  console.log(res);
-}
+let arg = [1, 2, 3, 4];
+const a = arg.indexOf(5);
+console.log(a);
 
+const arr = [1, 2, 3];
+// const [c, d, e] = arr;
+console.log(...arr);
