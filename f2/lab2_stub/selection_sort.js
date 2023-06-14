@@ -192,3 +192,11 @@ console.log(a);
 const arr = [1, 2, 3];
 // const [c, d, e] = arr;
 console.log(...arr);
+
+
+
+function f(){
+
+
+}
+console.log(f.name);

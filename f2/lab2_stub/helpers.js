@@ -2,6 +2,7 @@
     and then export them for use in your other files.
 */
 
+import _ from "lodash";
 export const check_sortBy = (array, sortBy, sortByName) => {
   if (!Array.isArray(sortBy)) {
     throw `${sortByName} is not an array!`;
@@ -103,13 +104,30 @@ export function areObjsEqual(obj1, obj2) {
   return true;
 }
 
-export function test(func,func_name,...args) {
+export function test(func, func_name, is_error, expected_res, ...args) {
   try {
     // const [a,...e]=args;
     const res = func(...args);
-    console.log(`${func_name} passed successfully!`);
+    if (_.isEqual(res, expected_res)) {
+      console.log(`${func_name} passed successfully!\n`);
+    } else {
+      console.log(`${func_name} cannot pass successfully! The reason is:`);
+      console.log(`\tThe actual result is:${JSON.stringify(res)}`);
+      console.log(
+        `\tThe expected result is:${JSON.stringify(expected_res)}`
+      );
+      console.log(`\tthe args are ${JSON.stringify(args)}\n`);
+    }
   } catch (error) {
-    console.error(`${func_name} failed successful!`);
+    if (is_error) {
+      console.error(`${func_name} failed successfully with error: ${error}`);
+      console.log(`\tthe args are ${JSON.stringify(args)}\n`);
+    } else {
+      console.log(
+        `${func_name} did not pass as expected, and the error is ${error}`
+      );
+      console.log(`\tthe args are ${JSON.stringify(args)}\n`);
+    }
   }
 }
 
