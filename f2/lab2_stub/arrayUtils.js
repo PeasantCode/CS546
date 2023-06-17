@@ -120,12 +120,11 @@ export let sortAndFilter = (
     if (typeof a === "number" && typeof b === "number") return a - b;
     if (typeof a === "number") return -1;
     if (typeof b === "number") return 1;
-    // if (typeof a === "string" && typeof b === "string") {
-    //   if (a < b) return -1;
-    //   if (a > b) return 1;
-    //   return 0;
-    // }
-    return a.localeCompare(b);
+    if (typeof a === "string" && typeof b === "string") {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
+    }
   });
   return flattenArray;
 };

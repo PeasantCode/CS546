@@ -2,7 +2,7 @@
       using the ES6 exports syntax. 
       DO NOT CHANGE THE FUNCTION NAMES
 */
-
+import _ from "lodash";
 export let palindromes = (string) => {
   if (!string) throw "the input should not be empty!";
   if (!Array.isArray(string)) throw "the input is not an array!";
@@ -72,9 +72,9 @@ export let distance = (string, word1, word2) => {
   if (!string || !word1 || !word2) throw "input should not be empty strings!";
 
   if (
-    /[.,\/#!$%\^&\*;:{}=\-_`~()]/.test(string) ||
-    /[.,\/#!$%\^&\*;:{}=\-_`~()]/.test(word1) ||
-    /[.,\/#!$%\^&\*;:{}=\-_`~()]/.test(word2)
+    /^[.,\/#!$%\^&\*;:{}=\-_`~()]+$/.test(string) ||
+    /^[.,\/#!$%\^&\*;:{}=\-_`~()]+$/.test(word1) ||
+    /^[.,\/#!$%\^&\*;:{}=\-_`~()]+$/.test(word2)
   )
     throw "Inputs can't be strings made of only punctuation symbols or spaces";
 
@@ -84,26 +84,13 @@ export let distance = (string, word1, word2) => {
 
   const lower_word1 = word1.toLowerCase();
   const lower_word2 = word2.toLowerCase();
-  const words = string.split(" ");
+  const words = string.toLowerCase().split(" ");
 
-  let w1 = word1.indexOf(lower_word1);
-  let w2 = word2.indexOf(lower_word2);
+  let w1 = _.lastIndexOf(words, lower_word1);
+  let w2 = _.lastIndexOf(words, lower_word2);
   if (w1 === -1) throw "word1 must exist in the string!";
-  if (w2 === -1) throw "word1 must exist in the string!";
+  if (w2 === -1) throw "word2 must exist in the string!";
   if (w1 > w2) throw "word1 must appear before word2!";
 
-  const arr = [];
-  for (let w1 = 0; w1 < words.length; w1++) {
-    if (words[w1] === lower_word1) {
-      for (let w2 = 1; w2 < words.length; w2++) {
-        if (words[w2] === lower_word2) {
-          arr.push(Math.abs(w2 - w1));
-          arr.sort((a, b) => {
-            return a - b;
-          });
-        }
-      }
-    }
-  }
-  return arr[0];
+  return w2 - w1;
 };
