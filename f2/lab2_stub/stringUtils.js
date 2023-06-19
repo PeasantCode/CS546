@@ -66,9 +66,9 @@ export let distance = (string, word1, word2) => {
   if (typeof string !== "string") throw "the type of string should be string!";
   if (typeof word1 !== "string") throw "the type of word1 should be string!";
   if (typeof word2 !== "string") throw "the type of word2 should be string!";
-  string = string.trim();
-  word1 = word1.trim();
-  word2 = word2.trim();
+  string = string.trim().toLowerCase();
+  word1 = word1.trim().toLowerCase();
+  word2 = word2.trim().toLowerCase();
   if (!string || !word1 || !word2) throw "input should not be empty strings!";
 
   if (
@@ -79,18 +79,30 @@ export let distance = (string, word1, word2) => {
     throw "Inputs can't be strings made of only punctuation symbols or spaces";
 
   if (string.split(" ").length < 2)
-    throw "the string is ar least two words long!";
+    throw "the string is at least two words long!";
   if (word1 === word2) throw "word1 and word2 cannot be same!";
 
-  const lower_word1 = word1.toLowerCase();
-  const lower_word2 = word2.toLowerCase();
-  const words = string.toLowerCase().split(" ");
+  const regexOfWord1 = new RegExp(`\\b${word1}\\b`);
+  if (string.match(regexOfWord1) === null)
+    throw "word1 does not exist in string!";
+  const regexOfWord2 = new RegExp(`\\b${word2}\\b`);
+  if (string.match(regexOfWord2) === null)
+    throw "word2 does not exist in string!";
 
-  let w1 = _.lastIndexOf(words, lower_word1);
-  let w2 = _.lastIndexOf(words, lower_word2);
-  if (w1 === -1) throw "word1 must exist in the string!";
-  if (w2 === -1) throw "word2 must exist in the string!";
-  if (w1 > w2) throw "word1 must appear before word2!";
+  const regexOfTarget = new RegExp(
+    `\\b${word1}\\b[^\w]?(?:(?<!\\b${word1}\\b|\\b${word2}\\b).)*?\\b${word2}\\b`,
+    "gi"
+  );
 
-  return w2 - w1;
+  let targetArr = string.match(regexOfTarget);
+
+  if (targetArr === null) throw "word1 should appear before word2!";
+  if (targetArr.length > 1) {
+    targetArr.sort();
+    targetArr = targetArr[0].split(" ");
+  }
+  const targetArrLen = targetArr.join(" ").split(" ").length;
+  const word1Len = word1.split(" ").length;
+
+  return targetArrLen - word1Len;
 };
