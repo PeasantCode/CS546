@@ -267,7 +267,4 @@
 // // const target_arr = string.match(regex);
 // // console.log(target_arr);
 
-let stri = ["I really hope it will snow", "I like snow"];
-stri = stri[0];
-stri.split();
-console.log(stri);
+

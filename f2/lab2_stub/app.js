@@ -380,7 +380,7 @@ function distance_test() {
   test(
     distance,
     generateTestName("distance"),
-    {},
+    {is_error: false,expected_res:2},
     "I was going to buy workout powder yesterday",
     "going to",
     "workout powder"

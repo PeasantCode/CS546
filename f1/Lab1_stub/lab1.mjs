@@ -19,7 +19,6 @@ export const questionOne = (arr) => {
 };
 
 export const questionTwo = (numArray) => {
-  let result = [];
   for (let i = 0; i < numArray.length - 1; i++) {
     if (numArray[i] > numArray[i + 1]) {
       return [false, i, i + 1];

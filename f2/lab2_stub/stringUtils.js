@@ -98,11 +98,15 @@ export let distance = (string, word1, word2) => {
 
   if (targetArr === null) throw "word1 should appear before word2!";
   if (targetArr.length > 1) {
-    targetArr.sort();
+    targetArr.sort((a,b)=>a.length - b.length);
     targetArr = targetArr[0].split(" ");
   }
   const targetArrLen = targetArr.join(" ").split(" ").length;
   const word1Len = word1.split(" ").length;
+  const word2Len = word2.split( " ").length;
 
-  return targetArrLen - word1Len;
+  return targetArrLen - word1Len - word2Len + 1;
+
+    // targetArr = targetArr.sort((a,b) => a.length - b.length);
+    // return targetArr[0].split(' ').length - word1.split(' ').length;
 };
