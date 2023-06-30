@@ -1,36 +1,51 @@
 import axios from "axios";
-const original_users_data = await axios.get(
-  "https://gist.githubusercontent.com/jdelrosa/381cbe8fae75b769a1ce6e71bdb249b5/raw/564a41f84ab00655524a8cbd9f30b0409836ee39/users.json"
-);
-const users_data = original_users_data.data;
 
-const original_movies_data = await axios.get(
-  "https://gist.githubusercontent.com/jdelrosa/78dfa36561d5c06f7e62d8cce868cf8e/raw/2292be808f74c9486d4085bdbc2025bab84d462b/movies.json"
-);
-const movies_data = original_movies_data.data;
+const getData = (() => {
+  let users_data, movies_data;
 
-const getUserById = (id) => {
+  const fetchData = async () => {
+    if (!users_data) {
+      const original_users_data = await axios.get(
+        "https://gist.githubusercontent.com/jdelrosa/381cbe8fae75b769a1ce6e71bdb249b5/raw/564a41f84ab00655524a8cbd9f30b0409836ee39/users.json"
+      );
+
+      users_data = original_users_data.data;
+    }
+    if (!movies_data) {
+      const original_movies_data = await axios.get(
+        "https://gist.githubusercontent.com/jdelrosa/381cbe8fae75b769a1ce6e71bdb249b5/raw/564a41f84ab00655524a8cbd9f30b0409836ee39/users.json"
+      );
+
+      movies_data = original_movies_data.data;
+    }
+    return { users_data, movies_data };
+  };
+  return fetchData;
+})();
+
+const getUserById = async (id) => {
   if (!id) throw "id cannot be exist!";
   if (typeof id !== "string") throw "the type of id must be string!";
   id = id.trim();
   if (id.length === 0) throw "id cannot be empty!";
+  const users_data = await getData().users_data;
   if (
     users_data.every((item) => {
       item[id] !== id;
     })
   )
     throw "user not found in users list!";
-  for (let i = 0; i < users_data.length; i++) {
-    if (users_data[i].id === id) return users_data[i];
-  }
+  else return item;
 };
 
-const sameGenre = (genre) => {
+const sameGenre = async (genre) => {
   if (!genre) throw "genre cannot be empty!";
   if (typeof genre !== "string") throw " the type of genre must be string!";
   const lower_case_genre = genre.trim().toLowerCase();
-  if (lower_case_genre.length === 0) throw "genre cannot be consist by space!";
+  if (lower_case_genre.length === 0)
+    throw "genre cannot consist of spaces entirely!";
   const full_name_list = [];
+  const users_data = await getData().users_data;
   for (let i = 0; i < users_data.length; i++) {
     if (users_data[i].favorite_genre === genre) {
       const full_name = `${users_data[i].first_name} ${users_data[i].last_name}`;
@@ -47,76 +62,79 @@ const sameGenre = (genre) => {
   return full_name_list;
 };
 
-const moviesReviewed = (id) => {
-  if (!id) throw "id cannot be exist!";
+const moviesReviewed = async (id) => {
+  if (!id) throw "id must be exist!";
   if (typeof id !== "string") throw "the type of id must be string!";
   id = id.trim();
   if (id.length === 0) throw "id cannot be empty!";
+  const users_data = await getData().users_data;
   if (
     users_data.every((item) => {
       item[id] !== id;
     })
   )
     throw "user not found in users list!";
-  const res = [];
 
-  let user_name = " ";
-  let found = false;
+  let user_name;
+
   for (let i = 0; i < users_data.length; i++) {
     if (users_data[i].id === id) {
       user_name = users_data[i].username;
-      found = true;
-      break;
     }
   }
-  if (!found) throw "user is not found in the array of users!";
+  if (!user_name) throw "user is not found in the array of users!";
 
+  const res = [];
+  const movies_data = await getData().movies_data;
   for (let i = 0; i < movies_data.length; i++) {
     const movies_reviews = movies_data[i].reviews;
+
     for (let j = 0; j < movies_reviews.length; j++) {
       if (movies_reviews[j].username === user_name) {
-        const format = {};
+        const movie_and_reviews = {};
         const movies_name = movies_data[i].title;
-        format[movies_name] = movies_reviews[j];
-        res.push(format);
+        movie_and_reviews[movies_name] = movies_reviews[j];
+        res.push(movie_and_reviews);
       }
     }
   }
   return res;
 };
 
-const referMovies = (id) => {
-  if (!id) throw "id cannot be exist!";
+const referMovies = async (id) => {
+  if (!id) throw "id must be exist!";
   if (typeof id !== "string") throw "the type of id must be string!";
   id = id.trim();
   if (id.length === 0) throw "id cannot be empty!";
+  const users_data = await getData().users_data;
   if (
     users_data.every((item) => {
       item.id !== id;
     })
   )
     throw "user not found in users list!";
-  let favorite_genre = " ";
-  let user_name = " ";
-  const res = [];
-  users_data.forEach((element) => {
-    if (element.id === id) {
-      favorite_genre = element.favorite_genre;
-      user_name = element.username;
-    }
-  });
 
-    movies_data.forEach((item) => {
-      const genre = item.genre.split("|");
-      if (genre.includes(favorite_genre)) {
-      //   const reviews = reviews;
-        const userReviewed = item.reviews.some((items) => {
-          items.username === user_name;
-        });
-        if (!userReviewed) res.push(item.title);
-      }
-    });
+  let favorite_genre = "",
+    user_name = "";
+  for (let i = 0; i < users_data.length; i++) {
+    if (users_data[i].id === id) {
+      favorite_genre = users_data[i].favorite_genre;
+      user_name = users_data[i].username;
+    }
+  }
+
+  const res = [];
+  const movies_data = await getData().movies_data;
+  for (let i = 0; i < movies_data.length; i++) {
+    const genre = movies_data[i].genre.split("|");
+    if (genre.includes(favorite_genre)) {
+      const userReviewed = movies_data[i].reviews.some((review) => {
+        review.username === user_name;
+      });
+      if (!userReviewed) res.push(movies.title);
+    }
+  }
 
   return res;
 };
-console.log(referMovies("5060fc9e-10c7-4f38-9f3d-47b7f477568b"));
+console.log(moviesReviewed("64035fad-a5b7-48c9-9317-3e31e22fe26c"));
