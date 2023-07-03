@@ -35,4 +35,5 @@ export const check_string = (pram, pram_name) => {
     throw `the type of ${pram_name} must be string!`;
   pram = pram.trim();
   if (pram.length === 0) throw `${pram_name} cannot consist of spaces entirely!`;
+  return pram;
 };

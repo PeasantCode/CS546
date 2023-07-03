@@ -52,9 +52,11 @@ const sameGenre = async (genre) => {
   // if (typeof genre !== "string") throw " the type of genre must be string!";
   // genre = genre.trim();
   // if (genre.length === 0) throw "genre cannot consist of spaces entirely!";
-  check_string(genre, "genre");
+
+  genre = check_string(genre, "genre");
 
   const full_name_list = [];
+
   const users_data = await get_users_data();
 
   for (let i = 0; i < users_data.length; i++) {
@@ -78,7 +80,7 @@ const moviesReviewed = async (id) => {
   // if (typeof id !== "string") throw "the type of id must be string!";
   // id = id.trim();
   // if (id.length === 0) throw "id cannot be empty!";
-  check_string(id, "id");
+  id = check_string(id, "id");
   const users_data = await get_users_data();
 
   let user_name = "";
@@ -111,7 +113,7 @@ const referMovies = async (id) => {
   // if (typeof id !== "string") throw "the type of id must be string!";
   // id = id.trim();
   // if (id.length === 0) throw "id cannot be empty!";
-  check_string(id, "id");
+  id = check_string(id, "id");
   const users_data = await get_users_data();
 
   let found = false;

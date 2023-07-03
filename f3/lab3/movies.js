@@ -1,7 +1,7 @@
 import { check_string, get_users_data, get_movies_data } from "./helper.js";
 
 const findMoviesByDirector = async (directorName) => {
-  check_string(directorName, "directorName");
+  directorName = check_string(directorName, "directorName");
 
   const movies_data = await get_movies_data();
 
@@ -17,7 +17,7 @@ const findMoviesByDirector = async (directorName) => {
 };
 
 const findMoviesByCastMember = async (castMemberName) => {
-  check_string(castMemberName, "castMemberName");
+  castMemberName = check_string(castMemberName, "castMemberName");
 
   const movies_data = await get_movies_data();
 
@@ -33,7 +33,7 @@ const findMoviesByCastMember = async (castMemberName) => {
 };
 
 const getOverallRating = async (title) => {
-  check_string(title, "title");
+  title = check_string(title, "title");
 
   const movies_data = await get_movies_data();
 
@@ -59,7 +59,7 @@ const getOverallRating = async (title) => {
 };
 
 const getMovieById = async (id) => {
-  check_string(id, "id");
+  id = check_string(id, "id");
 
   const movies_data = await get_movies_data();
 
@@ -74,4 +74,4 @@ const getMovieById = async (id) => {
 };
 
 // console.log(await getMovieById("38fd6885-0271-4650-8afd-6d09f3a890a2"));
-console.log(await getMovieById('7989fa5e-5617-43f7-a931-46036f9dbcff'));
+console.log(await getMovieById("7989fa5e-5617-43f7-a931-46036f9dbcff"));
