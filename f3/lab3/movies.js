@@ -1,6 +1,6 @@
 import { check_string, get_users_data, get_movies_data } from "./helper.js";
 
-const findMoviesByDirector = async (directorName) => {
+export const findMoviesByDirector = async (directorName) => {
   directorName = check_string(directorName, "directorName");
 
   const movies_data = await get_movies_data();
@@ -12,11 +12,11 @@ const findMoviesByDirector = async (directorName) => {
     }
   }
   if (!res)
-    throw " no movies directed by this director are found in movies.json!";
+    throw ` no movies directed by this ${directorName} are found in movies.json!`;
   return res;
 };
 
-const findMoviesByCastMember = async (castMemberName) => {
+export const findMoviesByCastMember = async (castMemberName) => {
   castMemberName = check_string(castMemberName, "castMemberName");
 
   const movies_data = await get_movies_data();
@@ -32,7 +32,7 @@ const findMoviesByCastMember = async (castMemberName) => {
   return res;
 };
 
-const getOverallRating = async (title) => {
+export const getOverallRating = async (title) => {
   title = check_string(title, "title");
 
   const movies_data = await get_movies_data();
@@ -53,24 +53,20 @@ const getOverallRating = async (title) => {
 
   if (!found) throw `${title} cannot be found in movies.json!`;
 
-  let overall_rating = Math.floor((sum / amount) * 10);
-
-  return overall_rating / 10;
+  return Math.floor((sum / amount) * 10) / 10;
 };
 
-const getMovieById = async (id) => {
+export const getMovieById = async (id) => {
   id = check_string(id, "id");
 
   const movies_data = await get_movies_data();
 
-  let found = false;
   for (let i = 0; i < movies_data.length; i++) {
     if (movies_data[i].id === id) {
-      found = true;
       return movies_data[i];
     }
   }
-  if (!found) throw "this movies is not found in movies.json!";
+  throw `this movie which id is ${id} is not found in movies.json!`;
 };
 
 // console.log(await getMovieById("38fd6885-0271-4650-8afd-6d09f3a890a2"));

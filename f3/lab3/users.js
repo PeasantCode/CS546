@@ -29,25 +29,23 @@ import { check_string, get_movies_data, get_users_data } from "./helper.js";
 //   return fetch_movies_data;
 // })();
 
-const getUserById = async (id) => {
+export const getUserById = async (id) => {
   // if (!id) throw "id must be exist!";
   // if (typeof id !== "string") throw "the type of id must be string!";
   // id = id.trim();
   // if (id.length === 0) throw "id cannot be empty!";
-  check_string(id, "id");
+  id = check_string(id, "id");
   const users_data = await get_users_data();
 
-  let found = false;
   for (let i = 0; i < users_data.length; i++) {
     if (users_data[i].id === id) {
-      found = true;
       return users_data[i];
     }
   }
-  if (!found) throw "user not found in users list!";
+  throw "user not found in users list!";
 };
 
-const sameGenre = async (genre) => {
+export const sameGenre = async (genre) => {
   // if (!genre) throw "genre cannot be empty!";
   // if (typeof genre !== "string") throw " the type of genre must be string!";
   // genre = genre.trim();
@@ -75,7 +73,7 @@ const sameGenre = async (genre) => {
   return full_name_list;
 };
 
-const moviesReviewed = async (id) => {
+export const moviesReviewed = async (id) => {
   // if (!id) throw "id must be exist!";
   // if (typeof id !== "string") throw "the type of id must be string!";
   // id = id.trim();
@@ -108,7 +106,7 @@ const moviesReviewed = async (id) => {
   return res;
 };
 
-const referMovies = async (id) => {
+export const referMovies = async (id) => {
   // if (!id) throw "id must be exist!";
   // if (typeof id !== "string") throw "the type of id must be string!";
   // id = id.trim();
@@ -149,9 +147,3 @@ const referMovies = async (id) => {
 
   return res;
 };
-// console.log(await getUserById("48fded55-37cd-4e6b-8f19-e78b481a14a4"));
-console.log(await sameGenre("Action"));
-// console.log(await moviesReviewed("64035fad-a5b7-48c9-9317-3e31e22fe26c"));
-// console.log(await referMovies("5060fc9e-10c7-4f38-9f3d-47b7f477568b"));
-// console.log(await getUserById(" "));
-// console.log(await getUserById(123));
