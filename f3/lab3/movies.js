@@ -69,5 +69,3 @@ export const getMovieById = async (id) => {
   throw `this movie which id is ${id} is not found in movies.json!`;
 };
 
-// console.log(await getMovieById("38fd6885-0271-4650-8afd-6d09f3a890a2"));
-console.log(await getMovieById("7989fa5e-5617-43f7-a931-46036f9dbcff"));

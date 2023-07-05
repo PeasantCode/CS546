@@ -256,3 +256,107 @@ await test(
   },
   "Fernando Dollimore"
 );
+await test(
+  findMoviesByCastMember,
+  "findMoviesByCastMember",
+  {
+    is_error: false,
+    expected_res: [
+      {
+        id: "040d7398-136c-45f0-89b8-9b73c67c617e",
+        title: "Company",
+        genre: "Drama|Musical",
+        director: "Fernando Dollimore",
+        release_date: "10/27/2020",
+        runtime: "1h 14mins",
+        mpa_rating: "PG-13",
+        cast: ["Huberto Snoddon", "Horacio Scoggins"],
+        streaming_service: {
+          company: "Netflix",
+          link: "https://Netflix.com/Company",
+        },
+        reviews: [
+          {
+            username: "jsorrelaw",
+            rating: 2,
+            review: "It was meh, plot was very bad.",
+          },
+          { username: "sgiacobo1n", rating: 3, review: "A very ok movie." },
+          { username: "egrigolieb", rating: 3, review: "A very ok movie." },
+          { username: "lmcinnesmk", rating: 4, review: "Solid, good movie." },
+        ],
+      },
+      {
+        id: "ab000bf0-f2e5-4cda-9294-e588a734f0ef",
+        title: "Herod's Law (Ley de Herodes, La)",
+        genre: "Comedy|Crime|Mystery",
+        director: "Lise Glanister",
+        release_date: "06/13/2003",
+        runtime: "1h 57mins",
+        mpa_rating: "NC-17",
+        cast: ["Huberto Snoddon", "Mickie Rankine"],
+        streaming_service: {
+          company: "Amazon Prime Video",
+          link: "https://Amazon Prime Video.com/Herod's Law (Ley de Herodes, La)",
+        },
+        reviews: [
+          { username: "iaistonli", rating: 1, review: "HORRIBLE MOVIE!!!" },
+        ],
+      },
+    ],
+  },
+  "Huberto Snoddon"
+);
+
+await test(
+  getOverallRating,
+  "getOverallRating",
+  { is_error: false, expected_res: 2.2 },
+  "Asterix and the Vikings (Astérix et les Vikings)"
+);
+await test(getOverallRating, "getOverallRating", {}, 43);
+await test(getOverallRating, "getOverallRating", {}, " ");
+await test(getOverallRating, "getOverallRating", {}, "Mamma Mia");
+await test(getOverallRating, "getOverallRating", {});
+
+await test(
+  getMovieById,
+  "getMovieById",
+  {
+    is_error: false,
+    expected_res: {
+      id: "38fd6885-0271-4650-8afd-6d09f3a890a2",
+      title: "Asterix and the Vikings (Astérix et les Vikings)",
+      genre: "Adventure|Animation|Children|Comedy|Fantasy",
+      director: "Charissa Edinboro",
+      release_date: "06/29/2007",
+      runtime: "2h 35mins",
+      mpa_rating: "R",
+      cast: ["Sharl Covert", "Ailyn Howcroft", "Nissie Henrys"],
+      streaming_service: {
+        company: "Disney+",
+        link: "https://Disney+.com/Asterix and the Vikings (Astérix et les Vikings)",
+      },
+      reviews: [
+        { username: "afrill27", rating: 3, review: "A very ok movie." },
+        { username: "tchedzoy2v", rating: 1, review: "HORRIBLE MOVIE!!!" },
+        {
+          username: "ltruckettim",
+          rating: 2,
+          review: "It was meh, plot was very bad.",
+        },
+        { username: "fgoodale6l", rating: 3, review: "A very ok movie." },
+      ],
+    },
+  },
+  "38fd6885-0271-4650-8afd-6d09f3a890a2"
+);
+await test(getMovieById, "getMovieById", {}, -1);
+await test(getMovieById, "getMovieById", {}, 1001);
+await test(getMovieById, "getMovieById", {});
+await test(
+  getMovieById,
+  "getMovieById",
+  {},
+  "7989fa5e-5617-43f7-a931-46036f9dbcff"
+);
