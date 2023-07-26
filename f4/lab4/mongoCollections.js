@@ -16,8 +16,3 @@ const getCollectionFn = (collection) => {
 
 /* Now, you can list your collections here: */
 export const bands = getCollectionFn('bands');
-
-
-const bandddd = await bands();
-await bandddd.find();
-await closeConnection();

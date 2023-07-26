@@ -14,3 +14,8 @@ const full_name_list = arr2.map(name=>`${name[0]} ${name[1]}`)
 
 const a  = ['aaa','bbb']
 console.log(a.includes('aaa'));
+
+let fff;
+console.log(fff===undefined);
+
+
