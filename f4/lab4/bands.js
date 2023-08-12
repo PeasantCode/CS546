@@ -1,14 +1,12 @@
 import { bands } from "./mongoCollections.js";
 import { Collection, ObjectId } from "mongodb";
 import { check_string } from "./helper.js";
-import { update } from "lodash";
+import _ from 'loadsh'
 export const create = async (
   name,
   genre,
-  website,
-  recordCompany,
-  groupMembers,
-  yearBandWasFormed
+  website,  recordCompany,
+  groupMembers,  yearBandWasFormed
 ) => {
   name = name.trim();
   website = website.trim();
@@ -109,10 +107,4 @@ export const rename = async (id, newName) => {
   return updatedInfo;
 };
 
-// const aaa = await create( "Linkin Park",
-// ["Alternative Rock", "Pop Rock", "Alternative Metal"],
-// "http://www.linkinpark.com",
-//  "Warner",
-//  ["Chester Bennington", "Rob Bourdon", "Brad Delson", "Mike Shinoda", "Dave Farrell", "Joe Hahn"],
-//  1996)
-//  console.log(aaa);
+
