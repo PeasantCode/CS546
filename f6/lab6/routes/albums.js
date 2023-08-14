@@ -2,12 +2,17 @@ import { Router } from "express";
 const router = Router();
 import * as allAlbumsFunctions from "../data/albums.js";
 import * as allBandsFunctions from "../data/bands.js";
-import { check_Id, check_string, checkStrArray } from "../data/helper.js";
+import {
+  check_Id,
+  check_string,
+  checkStrArray,
+  checkDate,
+} from "../data/helper.js";
 
 router
-  .route("/albums/{bandId}")
+  .route("/:bandId")
   .get(async (req, res) => {
-    const bandId = req.params.bandId;
+    let bandId = req.params.bandId;
     try {
       bandId = check_Id(bandId, "bandId");
     } catch (e) {
@@ -21,12 +26,12 @@ router
     }
   })
   .post(async (req, res) => {
-    const bandId = req.params.bandId;
+    let bandId = req.params.bandId;
     const data = req.body;
+    if (!data)
+      throw "name,genre, website,recordCompany,groupMembers,yearBandWasFormed must be exist!";
+    let { title, releaseDate, tracks, rating } = data;
     try {
-      if (!data)
-        throw "name,genre, website,recordCompany,groupMembers,yearBandWasFormed must be exist!";
-      let [title, releaseDate, tracks, rating] = data;
       bandId = check_Id(bandId, "bandId");
       title = check_string(title, "title");
       tracks = checkStrArray(tracks, "tracks");
@@ -49,7 +54,13 @@ router
       return res.status(404).json({ error: e });
     }
     try {
-      const newAlbums = await allAlbumsFunctions.create(bandId);
+      const newAlbums = await allAlbumsFunctions.create(
+        bandId,
+        title,
+        releaseDate,
+        tracks,
+        rating
+      );
       const updatedBand = await allBandsFunctions.get(bandId);
       return res.json(updatedBand);
     } catch (e) {
@@ -58,9 +69,9 @@ router
   });
 
 router
-  .route("/albums/album/{albumId}")
+  .route("/album/:albumId")
   .get(async (req, res) => {
-    const albumId = req.params.albumId;
+    let albumId = req.params.albumId;
     try {
       albumId = check_Id(albumId, "albumId");
     } catch (e) {
@@ -74,7 +85,7 @@ router
     }
   })
   .delete(async (req, res) => {
-    const albumId = req.params.albumId;
+    let albumId = req.params.albumId;
 
     try {
       albumId = check_Id(albumId, "albumId");

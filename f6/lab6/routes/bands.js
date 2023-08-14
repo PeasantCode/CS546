@@ -10,7 +10,7 @@ router
       const allBands = await all_functions.getAll();
       return res.json(allBands);
     } catch (e) {
-      return res.sendStatus(400);
+      return res.status(400);
     }
   })
   .post(async (req, res) => {
@@ -58,9 +58,9 @@ router
   });
 
 router
-  .route("/{id}")
+  .route("/:id")
   .get(async (req, res) => {
-    const id = req.params.id;
+    let id = req.params.id;
     try {
       id = check_Id(id, "id");
     } catch (e) {
@@ -74,9 +74,9 @@ router
     }
   })
   .put(async (req, res) => {
-    const id = req.params.id;
+    let id = req.params.id;
     try {
-      const id = check_Id(id, "id");
+      id = check_Id(id, "id");
       const data = req.body;
       if (!data)
         throw "name,genre, website,recordCompany,groupMembers,yearBandWasFormed must be exist!";
@@ -123,7 +123,7 @@ router
     }
   })
   .delete(async (req, res) => {
-    const id = req.params.id;
+    let id = req.params.id;
     try {
       id = check_Id(id, "id");
     } catch (e) {

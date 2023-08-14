@@ -18,3 +18,5 @@ const closeConnection = async () => {
 };
 
 export { dbConnection, closeConnection };
+const db = await dbConnection();
+await db.dropDatabase();

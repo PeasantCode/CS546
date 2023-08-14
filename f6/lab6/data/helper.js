@@ -1,4 +1,4 @@
-import _ from "loadsh";
+import { ObjectId } from "mongodb";
 
 export const check_string = (pram, pram_name) => {
   if (!pram) throw `${pram_name} must be exist!`;
@@ -12,8 +12,7 @@ export const check_string = (pram, pram_name) => {
 
 export const check_Id = (pram, pram_name) => {
   pram = check_string(pram, pram_name);
-  if (!check_ObjectId.isValidId(pram))
-    throw `${pram_name} is not a valid ObjectId!`;
+  if (!ObjectId.isValid(pram)) throw `${pram_name} is not a valid ObjectId!`;
   return pram;
 };
 

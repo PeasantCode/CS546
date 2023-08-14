@@ -49,7 +49,7 @@ export const get = async (id) => {
   id = check_Id(id, "id");
   const bandsCollection = await bands();
   const targetBand = await bandsCollection.findOne({ _id: new ObjectId(id) });
-  if (!targetBand) throw "this id does not exist in database!";
+  if (!targetBand) throw "this id does not exist in the database!";
   targetBand._id = targetBand._id.toString();
   return targetBand;
 };
@@ -60,7 +60,7 @@ export const remove = async (id) => {
   const deleteInfo = await bandsCollection.findOneAndDelete({
     _id: new ObjectId(id),
   });
-  if (deleteInfo.lastErrorObject !== 1) throw "deletion failed!";
+  if (deleteInfo.lastErrorObject.n !== 1) throw "deletion failed!";
   const delSucceed = { bandId: id, deleted: true };
   return delSucceed;
 };

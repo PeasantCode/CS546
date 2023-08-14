@@ -36,4 +36,8 @@ const isLeapYear = (year) => {
   return;
 };
 
+let a = 11 / 3;
+console.log(a.toFixed(1));
 
+
+console.log(+ "a");
