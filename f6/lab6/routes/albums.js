@@ -85,7 +85,7 @@ router
     }
   })
   .delete(async (req, res) => {
-    let albumId = req.params.albumId;
+    albumId = req.params.albumId;
 
     try {
       albumId = check_Id(albumId, "albumId");

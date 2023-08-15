@@ -2,6 +2,7 @@ import { Router } from "express";
 const router = Router();
 import * as all_functions from "../data/bands.js";
 import { check_Id, check_string, checkStrArray } from "../data/helper.js";
+import { ObjectId } from "mongodb";
 
 router
   .route("/")
@@ -10,7 +11,7 @@ router
       const allBands = await all_functions.getAll();
       return res.json(allBands);
     } catch (e) {
-      return res.status(400);
+      return res.status(400).json({ error: e });
     }
   })
   .post(async (req, res) => {
@@ -74,20 +75,24 @@ router
     }
   })
   .put(async (req, res) => {
-    let id = req.params.id;
+    let bandId = req.params.id;
+    bandId = check_Id(id, "id");
+    const data = req.body;
+    if (!data)
+      throw "name,genre, website,recordCompany,groupMembers,yearBandWasFormed must be exist!";
+    let {
+      id,
+      name,
+      genre,
+      website,
+      recordCompany,
+      groupMembers,
+      yearBandWasFormed,
+    } = data;
     try {
-      id = check_Id(id, "id");
-      const data = req.body;
-      if (!data)
-        throw "name,genre, website,recordCompany,groupMembers,yearBandWasFormed must be exist!";
-      let {
-        name,
-        genre,
-        website,
-        recordCompany,
-        groupMembers,
-        yearBandWasFormed,
-      } = data;
+      id = check_string(id, "id");
+      if (!ObjectId.isValid) throw "";
+      if (id !== bandId) throw "";
       name = check_string(name, "name");
       genre = checkStrArray(genre, "genre");
       website = check_string(website, "website");
@@ -116,7 +121,14 @@ router
       return res.status(404).json({ error: e });
     }
     try {
-      const updatedBand = await all_functions.update(id);
+      const updatedBand = await all_functions.update(
+        id,
+        name,
+        website,
+        recordCompany,
+        groupMembers,
+        yearBandWasFormed
+      );
       return res.json(updatedBand);
     } catch (e) {
       return res.status(400).json({ error: e });
